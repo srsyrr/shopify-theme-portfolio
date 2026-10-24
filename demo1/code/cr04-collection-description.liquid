@@ -1,0 +1,98 @@
+{%- comment -%}
+  Excerpt from a practice project (fictional brand Skinhale, Shopify development store).
+  Base theme: Horizon 4.3.0 (c) Shopify. Only the code added for this project is shown (written with an AI coding agent, see the README); the rest of the theme is not published.
+{%- endcomment -%}
+{%- doc -%}
+  Collection description that can be shortened to its first words with a "Show more / Show less" toggle.
+  Uses a native <details> element (no JavaScript); the full description is always in the HTML.
+  Theme settings > Collection description control it. Short, empty or unshortened descriptions render
+  exactly like the text block (snippets/text.liquid).
+
+  @example
+  {% content_for 'block', type: 'collection-description', id: 'collection-description' %}
+{%- enddoc -%}
+
+{% liquid
+  assign words_shown = settings.collection_description_words
+  # Put a space after each closing paragraph so words from two paragraphs don't run together
+  assign words = block.settings.text | replace: '</p>', '</p> ' | strip_html | split: ' '
+
+  assign shorten = false
+  if settings.collection_description_shorten and words.size > words_shown
+    assign shorten = true
+  endif
+%}
+
+{%- if shorten -%}
+  {%- liquid
+    assign preview = words | slice: 0, words_shown | join: ' '
+    # Drop a trailing punctuation mark so the preview never ends in ".…"
+    assign last_character = preview | slice: -1
+    if '.,;:!?' contains last_character
+      assign preview_length = preview.size | minus: 1
+      assign preview = preview | slice: 0, preview_length
+    endif
+  -%}
+  <div class="collection-description">
+    <p class="collection-description__preview">{{ preview }}…</p>
+    <details class="collection-description__toggle">
+      <summary class="collection-description__summary">
+        <span class="collection-description__more">
+          {{- settings.collection_description_more_label | escape -}}
+        </span>
+        <span class="collection-description__less">
+          {{- settings.collection_description_less_label | escape -}}
+        </span>
+      </summary>
+      {% render 'text', block: block %}
+    </details>
+  </div>
+{%- else -%}
+  {% render 'text', block: block %}
+{%- endif -%}
+
+{% stylesheet %}
+  .collection-description {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+    width: 100%;
+    min-width: 0;
+  }
+
+  .collection-description__preview {
+    margin: 0;
+    overflow-wrap: break-word;
+  }
+
+  .collection-description:has(.collection-description__toggle[open]) .collection-description__preview {
+    display: none;
+  }
+
+  .collection-description__toggle {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+  }
+
+  .collection-description__summary {
+    display: block;
+    text-align: center;
+    color: var(--color-primary-button-background);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .collection-description__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .collection-description__toggle[open] .collection-description__more,
+  .collection-description__toggle:not([open]) .collection-description__less {
+    display: none;
+  }
+{% endstylesheet %}
+
+{% comment %} Schema: the same settings as Horizon's text block (not reproduced here). Global settings: Theme settings > Collection description. {% endcomment %}

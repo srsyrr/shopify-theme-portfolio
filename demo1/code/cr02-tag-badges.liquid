@@ -1,0 +1,58 @@
+{%- comment -%}
+  Excerpt from a practice project (fictional brand Skinhale, Shopify development store).
+  Base theme: Horizon 4.3.0 (c) Shopify. Only the code added for this project is shown (written with an AI coding agent, see the README); the rest of the theme is not published.
+{%- endcomment -%}
+{%- comment -%} CR-02 - blocks/_product-card-gallery.liquid (added part) {%- endcomment -%}
+{% liquid
+  assign product = closest.product
+
+  assign show_theme_badge = false
+  if product.available == false or product.compare_at_price > product.price
+    assign show_theme_badge = true
+  endif
+
+  assign has_tag_badges = false
+  assign tag_badge_count = 0
+%}
+
+{% # Tag badges: a tag that starts with "badge:" (any letter case) shows the rest of the tag as a label. Max 2, in tag order. %}
+{%- capture tag_badges -%}
+  {%- if settings.show_tag_badges -%}
+    {%- for tag in product.tags -%}
+      {%- assign tag_prefix = tag | slice: 0, 6 | downcase -%}
+      {%- assign tag_text = tag | slice: 6, tag.size | strip -%}
+      {%- if tag_prefix == 'badge:' and tag_text != blank -%}
+        <div class="product-badges__badge product-badges__badge--rectangle product-badges__badge--tag product-badges__badge--{{ settings.tag_badge_style }}">
+          {{- tag_text | escape -}}
+        </div>
+        {%- assign has_tag_badges = true -%}
+        {%- assign tag_badge_count = tag_badge_count | plus: 1 -%}
+        {%- if tag_badge_count == 2 -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- comment -%} CR-02 - snippets/product-badges-styles.liquid (added rules) {%- endcomment -%}
+{% stylesheet %}
+  /* Tag badges use the accent colour (primary button) from theme settings */
+  .product-badges__badge--tag {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .product-badges__badge--filled {
+    color: var(--color-primary-button-text);
+    background: var(--color-primary-button-background);
+  }
+
+  /* Background fill keeps the text readable on any photo (ISS-D1-01).
+     Inset shadow instead of a border, so both styles have the same size */
+  .product-badges__badge--outline {
+    color: var(--color-primary-button-background);
+    background: var(--color-background);
+    box-shadow: inset 0 0 0 var(--style-border-width) var(--color-primary-button-background);
+  }
+{% endstylesheet %}
