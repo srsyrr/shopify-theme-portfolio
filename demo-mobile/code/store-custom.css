@@ -1,0 +1,68 @@
+/* Store custom CSS: changes added on top of Horizon for this store.
+   Loaded after the theme's own styles in layout/theme.liquid.
+   Rules outside a media query apply at every width; phone fixes live in the
+   max-width: 749px block (Horizon's own phone breakpoint), so desktop is unchanged. */
+
+/* Bigger, spaced-out wordmark in the header */
+.header-logo {
+  font-size: 2.25rem;
+  letter-spacing: 0.2em;
+  white-space: nowrap;
+}
+
+/* Product cards: larger titles, and a fixed title height so prices line up across a row */
+.product-card a.user-select-text > .text-block {
+  height: 4.5em;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Tablets (750-989 px) */
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  /* Fix: the menu column was sized to its content ("auto"), so the long menu label
+     "Face care: cleansers, toners, ..." pushed search, account and cart past the right edge.
+     Let the menu column shrink instead; extra menu items move into Horizon's "More" list. */
+  .header__columns:has(.header__column--left header-menu) {
+    --header-left: minmax(0, 1fr) !important;
+  }
+}
+
+/* Phones */
+@media screen and (max-width: 749px) {
+  /* Fix: header icons keep Horizon's own size (about 44 x 44 px), so they are easy to tap.
+     The old "compact header" rule shrank them to 24 px. Only the wordmark spacing is reduced
+     so the logo and four icons fit side by side on a 360 px screen. */
+  .header-logo {
+    letter-spacing: 0.08em;
+  }
+
+  /* Fix: square photos instead of 3:4. Still larger than the theme default, but price,
+     options and Add to cart stay on the first screen. */
+  .product-information__media .product-media {
+    aspect-ratio: 1 / 1 !important;
+  }
+
+  .product-information__media .product-media__image {
+    object-fit: cover !important;
+  }
+
+  /* Fix: Add to cart at least 48 px tall with readable text (was 32 px / 12 px). */
+  .product-form-buttons button[name='add'] {
+    min-height: 48px;
+    font-size: 1rem;
+  }
+
+  /* Fix: titles are no longer cut to a fixed height that spills over the price.
+     Long titles show 3 lines and end with "…"; the full title is on the product page
+     and in the link's text for screen readers. Short titles keep the same 3-line slot,
+     so prices still line up. */
+  .product-card a.user-select-text > .text-block {
+    height: 4.5em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    font-size: 0.9375rem;
+  }
+}

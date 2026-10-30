@@ -1,0 +1,43 @@
+/* Store custom CSS: changes added on top of Horizon for this store.
+   Loaded after the theme's own styles in layout/theme.liquid. */
+
+/* Bigger, spaced-out wordmark in the header */
+.header-logo {
+  font-size: 2.25rem;
+  letter-spacing: 0.2em;
+  white-space: nowrap;
+}
+
+/* Product cards: larger titles, and a fixed title height so prices line up across a row */
+.product-card a.user-select-text > .text-block {
+  height: 4.5em;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Phones: compact header icons and buttons, taller product photos */
+@media screen and (max-width: 749px) {
+  .header__icon--menu,
+  .header-actions__action,
+  .search-action .header-actions__action {
+    width: 24px;
+    height: 24px;
+    min-width: 0;
+    padding: 0;
+  }
+
+  .product-information__media .product-media {
+    aspect-ratio: 3 / 4 !important;
+  }
+
+  .product-information__media .product-media__image {
+    object-fit: cover !important;
+  }
+
+  .product-form-buttons button[name='add'] {
+    height: 32px;
+    min-height: 32px;
+    padding-block: 0;
+    font-size: 0.75rem;
+  }
+}

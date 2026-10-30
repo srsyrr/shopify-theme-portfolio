@@ -1,0 +1,96 @@
+{%- comment -%}
+  Trust bar: a row of short store promises (shipping, returns, ingredients).
+  Custom section, not part of Horizon.
+{%- endcomment -%}
+<div class="section section--page-width trust-bar">
+  <ul class="trust-bar__list" role="list">
+    {%- for block in section.blocks -%}
+      <li class="trust-bar__item" {{ block.shopify_attributes }}>
+        <p class="trust-bar__title">{{ block.settings.title }}</p>
+        {%- if block.settings.text != blank -%}
+          <p class="trust-bar__text">{{ block.settings.text }}</p>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+
+{% stylesheet %}
+  .trust-bar {
+    padding-block: 32px;
+  }
+
+  .trust-bar__list {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .trust-bar__item {
+    flex: 0 0 320px;
+    padding: 20px 24px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  .trust-bar__title {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 1.125rem;
+    white-space: nowrap;
+  }
+
+  .trust-bar__text {
+    margin: 6px 0 0;
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  /* Phones and tablets: let the items wrap instead of forcing a 1,008 px row.
+     Each item is at least 200 px wide: one per row on phones, three in a row at 768 px. */
+  @media screen and (max-width: 989px) {
+    .trust-bar__list {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .trust-bar__item {
+      flex: 1 1 200px;
+      min-width: 0;
+      padding: 16px;
+    }
+
+    .trust-bar__title {
+      white-space: normal;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trust bar",
+  "tag": "section",
+  "class": "trust-bar-section",
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Free shipping over $50" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Ships in 1–2 business days" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Trust bar",
+      "blocks": [{ "type": "item" }, { "type": "item" }, { "type": "item" }]
+    }
+  ]
+}
+{% endschema %}

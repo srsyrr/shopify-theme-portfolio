@@ -6,6 +6,18 @@
 
 This repository holds the write-ups, test results, screenshots and the code added to the theme for these projects. The full theme (Horizon by Shopify) stays private because its licence does not allow redistribution.
 
+## Mobile fix — "My store looks broken on phones" (Horizon 4.3.0)
+
+Six layout problems on phones and tablets found and fixed: sideways scrolling, a text box running off the screen, header icons too small to tap, a thin Add to cart at the bottom edge of the screen, a long product name over its price, and a cart icon pushed off-screen on tablets. **The desktop layout stayed the same** (1,440 px before/after compared pixel by pixel). **The broken state was simulated** on a copy of the theme. Five problems were added on purpose, the way a previous developer might leave them, and the sixth was found while testing.
+
+**Read first:** [Case study](demo-mobile/README.md) · [QA results](demo-mobile/qa.md) · [How the broken state was made](demo-mobile/simulated-problems.md) · [Code diff](demo-mobile/code/mobile-fixes.diff)
+
+| | |
+|---|---|
+| ![Homepage on a 360 px phone, before and after](demo-mobile/images/DM_compare_trust-bar_360w_chromium-headless_20261030.png) | ![Product page first screen on a 360 px phone, before and after](demo-mobile/images/DM_compare_pdp-first-screen_360w_chromium-headless_20261030.png) |
+
+Checked at 360, 390, 414, 768 and 1,440 px on the homepage, a collection and a product page. After the fix there is no sideways scroll at any width, and the menu, cart and Add to cart are at least 44 × 44 px and on screen. Not tested: real phones and Safari/iOS (simulated widths in Chromium).
+
 ## Demo 1 — Theme customization from a written brief (Horizon 4.3.0)
 
 Four change requests from a [written brief](demo1/brief.md), each with acceptance criteria tied to a page and a screen width. Built on a copy of the theme; the original stayed untouched for comparison. Nothing was published to a live store.
@@ -41,4 +53,4 @@ Long collection descriptions show the first 30 words and a "Show more" link (nat
 7 pages × 5 widths (360–1440 px) with no horizontal scroll; functional checks (navigation, search, sort/filter, variants, cart); Microsoft Edge and Firefox spot checks; Shopify Theme Check with no new errors. Not tested: Safari/iOS (no device), checkout (out of scope). Details and limitations: [QA checklist](demo1/qa-checklist.md) and the [case study](demo1/case-study.md#not-tested--limitations).
 
 ---
-_Demos 2 and 3 will be added here when finished._
+_More demos will be added here when finished._
